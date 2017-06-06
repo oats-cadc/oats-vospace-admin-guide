@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "oats_vospace_admin_guide.ent">
+%BOOK_ENTITIES;
+]>
+<chapter id="chap-intro">
+	<title>Introduction</title>
+
+	<para>
+		The VOSpace is a client and server 
+implementation of the IVOA VOSpace interface. The 
+VOSpace is a lightweight interface to distributed 
+storage specifying how VO (Virtual Observatory) 
+agents and applications can use network attached 
+data stores to persist and exchange data in a standard 
+way. It is supposed to sit on top of existing storage 
+solutions and the underlying storage system is not specified.
+	</para>
+	<para>
+The service requires an SQL Resource DataBase Management Service (RDBMS)  
+as default built-in persistence layer and it provides a
+RESTful interface.
+        </para>
+
+	<section id="sect-Requirements">
+		<title>Requirements and recomendations</title>
+                <para>
+                Prerequisites and recomendations to run the VOSpace Service are: 
+                </para>
+                <itemizedlist>
+                    <listitem>
+		        <para>
+	        	Centos 7 Operative System is recommended,	
+		        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        A Tomcat 7 installation with SSL/TLS support enabled is required,
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        An SQL RDBMS installation is required. MySql or MariaDB are recommended. 
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        An Access Control Service must be available,
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        A Credential Delegation Service must be available, 
+                        </para>
+                    </listitem>
+                    <listitem>
+                        <para>
+                        A Registry Service must be available.
+                        </para>
+                    </listitem>
+
+                </itemizedlist>
+
+	</section>
+
+</chapter>
+

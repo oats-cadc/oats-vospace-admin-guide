@@ -1,0 +1,328 @@
+<chapter id="chap-vospace-sw-repo">
+<title>The CADC VOSpace</title>
+
+<para>The CADC (Canadian Astronomy Data Center) open source software is 
+available on a github repository: 
+</para>
+<screen>
+https://github.com/opencadc
+</screen>
+
+
+<section id="sec-vospace_description">
+<title>VOSpace software description</title>
+
+<para>
+The VOSpace (vos) module is a client and server 
+implementation of the IVOA VOSpace Interface standard. 
+</para>
+<para>
+It contains two main modules:
+</para>
+<orderedlist>
+<listitem>
+<para><menuchoice><guimenu>cadc-vos</guimenu></menuchoice> : 
+VOSpace clients and common model objects and exceptions.</para>
+</listitem>
+<listitem>
+<para><menuchoice><guimenu>cadc-vos-server</guimenu></menuchoice> :
+VOSpace server and transfer service.</para> 
+</listitem>
+</orderedlist>
+
+</section>
+
+<section id="sec-vospace_sw_repo">
+<title>VOSpace software repository</title>
+
+<para>A copy of the VOSpace API can be obtained by:</para>
+<screen>
+git clone https://github.com/opencadc/vos
+</screen>
+<para>
+This is the main reference repository, but it is often updated and 
+no tags are available when this documentations is written, 
+so, a tagged/versioned repo (forked by the main one) can be reached at
+</para>
+<para>
+<ulink url="http://www.ict.inaf.it/gitlab/OATS-CADC/vos"></ulink>
+</para>
+<para>This guide is relative to the version tagged as v0.2.1</para>
+<para>To work with it, issue:</para>
+<screen>
+git clone https://www.ict.inaf.it/gitlab/OATS-CADC/vos.git
+git checkout tags/v0.2.1
+</screen>
+<para>or to work on a new local branch:</para>
+<screen>
+git clone https://www.ict.inaf.it/gitlab/OATS-CADC/vos.git
+git checkout tags/v0.2.1 -b &lt;branch-name&gt;
+</screen>
+
+
+<section id="sec-vospace_sw_implementation">
+<title>VOSpace software implementation</title>
+
+<para>
+The CADC libraries are highly configurable. In this case, four main implementations
+are needed to have a working service in place:
+</para>
+<orderedlist>
+<listitem>
+<screen>
+cadc-vos-server/src/main/java/ca/nrc/cadc/vos/
+                                server/DatabaseNodePersistence.java 
+</screen> 
+interface implementation to customize the Node persistence
+</listitem>
+<listitem>
+<screen>
+uws/cadc-uws-server/src/main/java/ca/nrc/cadc/uws/
+                                server/DatabaseJobPersistence.java 
+</screen> 
+interface implementation to customize the Job persistence
+</listitem>
+<listitem>
+<screen>
+cadc-vos-server/src/main/java/ca/nrc/cadc/vos/
+                                 server/transfers/TransferGenerator.java  
+</screen> 
+interface implementation to implement the data transfer mechanism. 
+The VOSpace standard does not care about the physical data storage service, 
+but it needs a way to return links to access data. This class implementation, 
+given some input metadata, returns the physical link to access the data. 
+</listitem>
+<listitem>
+A data storage service, providing a RESTful interface, to be used as
+VOSpace Service back-end.
+<listitem>
+</orderedlist>
+The INAF OATS-CADC repository provides an example implementation in the vospace-backend
+module.
+<screen>
+https://www.ict.inaf.it/gitlab/OATS-CADC/oats-vospace-backend
+</screen>
+and using MySql or MaraDb and mantaining the database name equals to "cadctest",
+this implementation can be used as is.
+</para>
+
+</section>
+
+
+<section id="sec-vospace_sw_download">
+<title>CADC VOSpace software build</title>
+
+<para>
+Each software module can be easily built using gradle (a build.gradle 
+file is included in each module).
+</para>
+<para>
+To build versus the newer library version published in
+maven central repository, the build.gradle file must contain 
+cadc dependencies written as:
+</para>
+<screen>
+compile 'org.opencadc:cadc-log:1.+'
+</screen>
+<para>
+To build using a local build of cadc libraries, the file must contain
+cadc dependencies written as:
+</para>
+<screen>
+compile files('/&lt;local-path&gt;/core/cadc-log/build/libs/cadc-log.jar')
+</screen>
+<para>The right order to build opencadc libraries locally is:</para>
+<itemizedlist>
+<listitem>
+<screen>
+core/cadc-util
+</screen>
+</listitem>
+<listitem>
+<screen>
+core/cadc-log
+</screen>
+</listitem>
+<listitem>
+<screen>
+ac/cadc-tomcat
+</screen>
+</listitem>
+<listitem>
+<screen>
+reg/cadc-registry
+</screen>
+</listitem>
+<listitem>
+<screen>
+reg/cadc-vosi
+</screen>
+</listitem>
+<listitem>
+<screen>
+uws/cadc-uws
+</screen>
+</listitem>
+<listitem>
+<screen>
+uws/cadc-uws-server
+</screen>
+</listitem>
+<listitem>
+<screen>
+cdp/cadc-cdp
+</screen>
+</listitem>
+<listitem>
+<screen>
+cdp/cadc-cdp-server
+</screen>
+</listitem>
+<listitem>
+<screen>
+ac/cadc-access-control
+</screen>
+</listitem>
+<listitem>
+<screen>
+ac/cadc-access-control-server
+</screen>
+</listitem>
+<listitem>
+<screen>
+ac/cadc-access-control-admin
+</screen>
+</listitem>
+<listitem>
+<screen>
+ac/cadc-access-control-identity
+</screen>
+</listitem>
+<listitem>
+<screen>
+cdp/cadc-vos
+</screen>
+</listitem>
+<listitem>
+<screen>
+cdp/cadc-vos-server
+</screen>
+</listitem>
+</itemizedlist>
+
+</section>
+
+
+<section id="sec-AC_deploy">
+<title>VOSpace Service deployment</title>
+
+<para>
+The VOSpace Service deployment package can be obtained issuing:
+</para>
+<screen>
+git clone https://www.ict.inaf.it/gitlab/OATS-CADC/oats-vospace-web.git
+</screen>
+<para>
+The repository contains some files to customize: 
+</para>
+<screen>
+oats-vospace-web/src/main/webapp/WEB-INF/web.xml.template
+oats-vospace-web/src/main/webapp/WEB-INF/capabilities.xml
+oats-vospace-web/src/main/webapp/META-INF/context.xml.template
+oats-vospace-web/src/main/sql/create_vospace_db.sql.template
+oats-vospace-web/src/main/resources/RsaSignaturePub.key.template
+oats-vospace-web/src/main/resources/RsaSignaturePriv.key.template
+oats-vospace-web/src/main/resources/LocalAuthority.properties
+oats-vospace-web/src/main/resources/LocalServiceURI.properties
+oats-vospace-web/src/main/resources/VOSpacePlugins.properties
+oats-vospace-web/src/main/resources/Views.properties
+oats-vospace-web/src/main/resources/VOSpace-2.0.xsd
+oats-vospace-web/src/main/resources/vospace.xsl
+oats-vospace-web/build.gradle.template
+</screen>
+<para>
+Each template file contains comments/instructions on how to customize it,
+except build.gradle.template which can be customized vs. maven central hosted 
+or local libraries, as previously described in
+<xref linkend="sec-vospace_sw_download"/>.
+</para>
+<para>
+The files context.xml.template and create_vospace_db.sql.template contain
+database connection parameters, so they must be customized accordingly
+to the elected persistence service 
+and keeping into account the configuration encoded in the classes
+NodePersistenceImpl.java and JobPersistenceImpl.java.
+</para>
+<para>
+The file capabilities.xml defines standards and capabilities (e.g., IVOA
+defined interfaces) provided by the service and it must be customized
+accordingly to the local service features.
+</para>
+<para>
+The file LocalAuthority.properties contains the relationship between
+the base standard IDs of the provided services (contained and
+described in the capabilities.xml file) and the autorities providing 
+the services.
+</para>
+<para>
+The file LocalServiceURI.properties contains the local service URI.
+</para>
+<para>
+The file VOSpacePlugins.properties is used to define the classes
+implementing the interface NodePersistence and the TransferGenerator
+interface. Both are loaded at run-time to perform node persistence
+and transfer operations. The job persistence is configured in the 
+web.xml file.
+</para>
+<para>
+The file Views.properties defines the views available in this 
+instance of VOSpace.
+</para>
+<para>
+The file vospace.xsl is this vospace instance stylesheet
+</para>
+<para>
+The file VOSpace-2.0.xsd is the VOSpace 2.0 XML schema definition.
+</para>
+<para>
+The package compilation produces the <command>vospace.war</command> file. It
+can be deployed issuing:</para>
+<screen>
+systemctl stop tomcat
+cp vospace.war $TOMCAT_HOME/webapps
+systemctl start tomcat
+</screen>
+<para>
+If some customization is done in the file contained in the deployment 
+location, be careful that the expected behavior of Tomcat is to
+treat the .war file deletion as a request to redeploy or undeploy 
+the application.  
+So, if the war file is deleted until tomcat is
+running, the application is undeployed (removed) by tomcat.
+</para>
+<para>
+If tomcat is stopped before deleting WAR file and started only 
+after that, the application will not be undeployed.
+</para>
+
+</section>
+
+<section id="sec-AC_deploy">
+<title>VOSpace Service operations</title>
+
+<para>
+The operation of the VOSpace Service requires the contextual run
+of a data storage service to be used as back-end. The 
+vospace-backend package published in 
+</para>
+<screen>
+https://www.ict.inaf.it/gitlab/OATS-CADC/oats-vospace-backend 
+https://www.ict.inaf.it/gitlab/OATS-CADC/oats-vospace-backend-web 
+</screen>
+<para>
+can be used or exploited as an example.
+</para>
+
+</section>
+
+</chapter>
